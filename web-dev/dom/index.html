@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo App</title>
+  </head>
+  <body>
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <h1>Todo Application</h1>
+      <div>
+        <input type="text" placeholder="Type your Todo here..." />
+        <button onclick="addTodo()">Add Todo</button>
+      </div>
+      <div class="todo-container"></div>
+    </div>
+    <script>
+      let counter = 1;
+      const parentContainer = document.querySelector(".todo-container");
+      function addTodo() {
+        const newTodo = document.createElement("div");
+        const p = document.createElement("p");
+        const deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "Delete";
+        deleteButton.style = "height:50px";
+        deleteButton.setAttribute("onclick", `deleteTodo(${counter})`);
+        newTodo.className = "todo-" + counter;
+        newTodo.setAttribute(
+          "style",
+          "display:flex; justify-content:space-between; width:300px; margin-top: 10px"
+        );
+        const inputContent =
+          counter + ". " + document.querySelector("input").value;
+        p.innerHTML = inputContent;
+        newTodo.appendChild(p);
+        newTodo.appendChild(deleteButton);
+        parentContainer.appendChild(newTodo);
+        counter++;
+      }
+
+      function deleteTodo(index) {
+        const ele = document.querySelector(`.todo-${index}`);
+        const parent = ele.parentNode;
+        parent.removeChild(ele);
+      }
+    </script>
+  </body>
+</html>
