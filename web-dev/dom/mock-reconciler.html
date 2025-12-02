@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mock Reconciler</title>
+  </head>
+  <body>
+    <div style="margin-bottom: 20px">
+      <input type="text" />
+      <button onclick="addTodo()">Add Todo</button>
+      <button onclick="deleteFirstTodo()">Delete First Todo</button>
+      <button onclick="deleteLastTodo()">Delete Last Todo</button>
+    </div>
+    <div id="todo-container"></div>
+    <script>
+      // We can make our DOM manipulation journey smoother like React by breaking our application into 2 parts => State and Components
+      // Depending on our current state we update the DOM
+      // To make frontends easier to code, the concept of "state" came into picture. State => the variable parts of the app, Components => the visual parts of the app(Header, TodoContainer, Footer, Form etc), Rendering => taking the state and rendering it on the DOM
+      let todos = [];
+      function addTodo() {
+        if (document.querySelector("input").value === "") return;
+        todos.push({
+          title: document.querySelector("input").value,
+          done: false,
+        });
+        render();
+      }
+
+      function deleteFirstTodo() {
+        todos.splice(0, 1);
+        render();
+      }
+
+      function deleteLastTodo() {
+        todos.splice(todos.length - 1, 1);
+        render();
+      }
+
+      function deleteTodo(index) {
+        todos.splice(index, 1);
+        render();
+      }
+
+      function markAsComplete(index) {
+        todos[index].done = !todos[index].done;
+        render();
+      }
+
+      function editTodo(index) {
+        const newTitle = prompt("Edit Your Todo", todos[index].title);
+        todos[index].title = newTitle || todos[index].title;
+        render();
+      }
+
+      function render() {
+        const todoContainer = document.querySelector("#todo-container");
+        todoContainer.innerHTML = "";
+        document.querySelector("input").value = "";
+        todos.map((todo, index) => {
+          const newTodo = document.createElement("div");
+
+          const span = document.createElement("span");
+          const checkbox = document.createElement("input");
+          checkbox.setAttribute("type", "checkbox");
+          checkbox.setAttribute("onclick", `markAsComplete(${index})`);
+          span.innerHTML = todo.title;
+          span.style = "margin-right: 20px";
+          if (todo.done) {
+            checkbox.checked = true;
+            span.setAttribute(
+              "style",
+              "text-decoration-line: line-through; margin-right: 20px"
+            );
+          }
+          const deleteBtn = document.createElement("button");
+          deleteBtn.innerHTML = "Delete";
+          deleteBtn.setAttribute("onclick", `deleteTodo(${index})`);
+          const editBtn = document.createElement("button");
+          editBtn.innerHTML = "Edit";
+          editBtn.setAttribute("onclick", `editTodo(${index})`);
+          editBtn.style = "margin-right: 20px";
+
+          newTodo.appendChild(checkbox);
+          newTodo.appendChild(span);
+          newTodo.appendChild(editBtn);
+          newTodo.appendChild(deleteBtn);
+          newTodo.style = "margin-bottom: 20px";
+          todoContainer.appendChild(newTodo);
+        });
+      }
+    </script>
+  </body>
+</html>
