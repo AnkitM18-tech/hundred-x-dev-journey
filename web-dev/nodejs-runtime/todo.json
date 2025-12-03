@@ -1,0 +1,13 @@
+{
+  "todos": [
+    { "title": "Go to Gym", "id": 1 },
+    { "title": "Go to Gym", "id": 3 },
+    { "title": "Code your Startup", "id": 5 },
+    { "title": "Move Abroad", "id": 6 }
+  ],
+  "deleted": [
+    { "title": "Go to Office", "id": 2 },
+    { "title": "Code", "id": 4 }
+  ],
+  "total": 6
+}
