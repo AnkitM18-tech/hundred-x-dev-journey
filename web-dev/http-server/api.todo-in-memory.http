@@ -1,0 +1,23 @@
+GET http://127.0.0.1:3000 HTTP/1.1
+
+###
+GET http://127.0.0.1:3000/todo-1764854395338 HTTP/1.1
+
+###
+POST http://127.0.0.1:3000/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Go to Class"
+}
+
+###
+PATCH http://127.0.0.1:3000/todo-1764854395338 HTTP/1.1
+Content-Type: application/json
+
+{
+    "title": "Go to Fight club"
+}
+
+###
+DELETE http://127.0.0.1:3000/todo-1764854395338 HTTP/1.1
