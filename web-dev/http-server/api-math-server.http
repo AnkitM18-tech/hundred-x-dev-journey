@@ -1,0 +1,11 @@
+GET http://127.0.0.1:3000/sum?a=3&b=8 HTTP/1.1
+
+###
+
+GET http://127.0.0.1:3000/subtract?a=3&b=8 HTTP/1.1
+###
+
+GET http://127.0.0.1:3000/multiply?a=3&b=8 HTTP/1.1
+###
+
+GET http://127.0.0.1:3000/divide?a=3&b=1 HTTP/1.1
