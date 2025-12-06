@@ -2,6 +2,13 @@ const express = require("express");
 
 const app = express();
 
+let requestCount = 0;
+
+app.use((req, res, next) => {
+  requestCount++;
+  next();
+});
+
 app.get("/sum", (req, res) => {
   const a = parseInt(req.query.a);
   const b = parseInt(req.query.b);
@@ -25,6 +32,10 @@ app.get("/divide", (req, res) => {
   const b = parseInt(req.query.b);
   if (b === 0) throw new Error("Arithmatic Error: Division by Zero");
   return res.status(200).json({ division: a / b });
+});
+
+app.get("/request-count", (req, res) => {
+  return res.status(200).json({ requestCount });
 });
 
 app.use((err, req, res, next) => {
