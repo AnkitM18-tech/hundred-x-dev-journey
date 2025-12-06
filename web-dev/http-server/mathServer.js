@@ -1,17 +1,20 @@
 const express = require("express");
+const cors = require("cors");
 
 const app = express();
 
 let requestCount = 0;
 
+app.use(cors());
+app.use(express.json());
 app.use((req, res, next) => {
   requestCount++;
   next();
 });
 
-app.get("/sum", (req, res) => {
-  const a = parseInt(req.query.a);
-  const b = parseInt(req.query.b);
+app.post("/sum", (req, res) => {
+  const a = parseInt(req.body.a);
+  const b = parseInt(req.body.b);
   return res.status(200).json({ sum: a + b });
 });
 

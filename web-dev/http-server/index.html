@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Server</title>
+  </head>
+  <body>
+    <input type="text" id="a" placeholder="First Number" />
+    <input type="text" id="b" placeholder="Second Number" />
+    <input type="text" id="result" placeholder="Result will appear here" />
+    <button onclick="getResult()">Get Result</button>
+    <script>
+      const getResult = async () => {
+        const a = document.getElementById("a").value;
+        const b = document.getElementById("b").value;
+        const data = await fetch(`http://127.0.0.1:3000/sum`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ a, b }),
+        });
+        const result = await data.json();
+        document.getElementById("result").value = result.sum;
+      };
+    </script>
+  </body>
+</html>

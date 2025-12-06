@@ -20,3 +20,19 @@ or in between the route and handler function individually -
     - app.get("/", middlewareName, (req, res) => {})
 
 **Order Matters in middlewares where we introduce them in the code.**
+
+## Some commonly used Middlewares
+
+    - app.use(express.json())
+        => if we want to send JSON data to the server, first we need to parse that data. In order to handle POST and PUT / PATCH method body (JSON), we use this middleware to parse that JSON data into object first, so that we can use those data. express uses bodyParser library under the hood.
+
+    - cors - cross origin resource sharing
+        => CORS is a security feature implemented by web browsers, that controls how resources on a web server can be requested from another domain. It is crucial for managing cross-origin requests and ensuring secure interactions between <i>different origins</i> on the web
+
+        => https://google.com (FE server) ---> https://api.facebook.com (BE server) - cross origin request
+        => Same Origin means a website's ****protocol(http / https), hostname (google.com, facebook.com etc), and ports(443, 80, 3000)**** are identical to another, on the contrast cross-origin occurs when any of these three components differ, triggering the browser's Same Origin Policy (SOP), a security feature that restricts how a page from one origin can interact with another origin
+        => In order to enable CORS , the backend should whitelist the URL of the Frontend.
+
+By default the cross origin requests are blocked. To enable our frontend to interact with our backend, we use cors middleware.
+
+    - pnpx serve from public/index.html - serve the HTML file fro public folder
