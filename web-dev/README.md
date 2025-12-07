@@ -36,3 +36,30 @@ or in between the route and handler function individually -
 By default the cross origin requests are blocked. To enable our frontend to interact with our backend, we use cors middleware.
 
     - pnpx serve from public/index.html - serve the HTML file fro public folder
+
+```js
+
+// transformation function
+function fn(i) {
+    // perform some operation
+}
+
+// Custom Map
+function map(arr, fn) {
+    const modifiedArr = [];
+    for(let i = 0; i <= arr.length: i++) {
+        modifiedArr.push(fn(arr[i]));
+    }
+    return modifiedArr;
+}
+
+```
+
+### Tokens vs JWT
+
+- Stateful Tokens - We need to store these tokens in a database.
+  The problem is that **we need to send a request to the database every time a user wants to hit an authenticated endpoint** and then we send that token with the request -> Expensive Operation
+
+- We can use JWTs (JSON Web Tokens) in order to prevent this expensive operation. **JWTs are stateless, they contain all the info needed to authenticate a request, so the server doesn't need to store session data. All the data is stored in the token itself**.
+
+- _JWTs are a compact and self-contained way to represent information between two parties. They are commonly used for authentication and information exchange in web applications_. We can store JWTs in Cookies or Auth Headers(Authorization). **Cookies are only browser specific, mobile devices don't understand the cookies**
