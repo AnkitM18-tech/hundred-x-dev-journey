@@ -80,8 +80,25 @@ const generateToken = () => {
   return token;
 };
 */
+const loggerMiddleware = (req, res, next) => {
+  console.log(`${req.method} ${req.url} - at ${new Date().toISOString()}`);
+  next();
+};
 
-app.post("/signup", (req, res) => {
+const authMiddleware = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) return res.status(401).json({ message: "Missing JWT" });
+
+  const decoded = jwt.verify(token, JWT_SECRET);
+  if (decoded.username) {
+    req.user = decoded.username;
+    next();
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
+app.post("/signup", loggerMiddleware, (req, res) => {
   const { username, password } = req.body;
   if (users.find((user) => user.username === username))
     return res.status(400).json({ message: "You have already signed up." });
@@ -89,7 +106,7 @@ app.post("/signup", (req, res) => {
   return res.status(201).json({ message: "You have signed up." });
 });
 
-app.post("/signin", (req, res) => {
+app.post("/signin", loggerMiddleware, (req, res) => {
   const { username, password } = req.body;
   let user = users.find(
     (user) => user.username === username && user.password === password
@@ -102,11 +119,8 @@ app.post("/signin", (req, res) => {
   }
 });
 
-app.get("/me", (req, res) => {
-  const token = req.headers.authorization;
-  const decoded = jwt.verify(token, JWT_SECRET);
-  let user = users.find((user) => user.username === decoded.username);
-  if (!user) return res.status(401).json({ message: "Unauthorized" });
+app.get("/me", loggerMiddleware, authMiddleware, (req, res) => {
+  let user = users.find((user) => user.username === req.user);
   return res.status(200).json({ user });
 });
 
