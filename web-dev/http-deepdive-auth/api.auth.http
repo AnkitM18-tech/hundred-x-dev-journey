@@ -20,4 +20,4 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/me
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImhvbGFhbWlnbyIsImlhdCI6MTc2NTExMTUxNH0.liCTggOQ0wkQkXtwyzJMMCYri_-89-4h2ZUBGpjH5lY
+Authorization: 
