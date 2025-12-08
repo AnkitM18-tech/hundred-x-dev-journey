@@ -80,14 +80,16 @@ const generateToken = () => {
   return token;
 };
 */
+
 const loggerMiddleware = (req, res, next) => {
-  console.log(`${req.method} ${req.url} - at ${new Date().toISOString()}`);
+  console.log(`${req.method} ${req.url} - ${new Date().toISOString()}`);
   next();
 };
 
 const authMiddleware = (req, res, next) => {
   const token = req.headers.authorization;
-  if (!token) return res.status(401).json({ message: "Missing JWT" });
+  if (!token)
+    return res.status(401).json({ message: "Invalid or Missing Token" });
 
   const decoded = jwt.verify(token, JWT_SECRET);
   if (decoded.username) {
@@ -98,11 +100,16 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+// localhost:3000 -> handles CORS
+app.get("/", (req, res) => {
+  return res.sendFile(__dirname + "/public/index.html");
+});
+
 app.post("/signup", loggerMiddleware, (req, res) => {
   const { username, password } = req.body;
   if (users.find((user) => user.username === username))
     return res.status(400).json({ message: "You have already signed up." });
-  else users.push({ username, password });
+  else users.push({ username, password, todos: [] });
   return res.status(201).json({ message: "You have signed up." });
 });
 
@@ -114,14 +121,46 @@ app.post("/signin", loggerMiddleware, (req, res) => {
   if (!user) {
     return res.status(401).json({ message: "Invalid Username or Password" });
   } else {
-    req.headers.authorization = jwt.sign({ username }, JWT_SECRET);
-    return res.status(200).json({ token: req.headers.authorization });
+    const token = jwt.sign({ username }, JWT_SECRET);
+    return res.status(200).json({ token: token });
   }
 });
 
 app.get("/me", loggerMiddleware, authMiddleware, (req, res) => {
   let user = users.find((user) => user.username === req.user);
   return res.status(200).json({ user });
+});
+
+app.get("/todos", loggerMiddleware, authMiddleware, (req, res) => {
+  let user = users.find((user) => user.username === req.user);
+  return res.status(200).json({ todos: user.todos });
+});
+
+app.post("/todos", loggerMiddleware, authMiddleware, (req, res) => {
+  let user = users.find((user) => user.username === req.user);
+  const { title } = req.body;
+  user["todos"].push({ title, id: `todo-${new Date().getTime().toString()}` });
+  return res.status(201).json({ message: "Todo added!" });
+});
+
+app.patch("/todos/:id", loggerMiddleware, authMiddleware, (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body;
+  let user = users.find((user) => user.username === req.user);
+  const updatedTodos = user.todos.filter((todo) => todo.id !== id);
+  const todo = user.todos.find((todo) => todo.id === id);
+  todo.title = title;
+  updatedTodos.push(todo);
+  user.todos = updatedTodos;
+  return res.status(200).json({ message: "Todo updated!" });
+});
+
+app.delete("/todos/:id", loggerMiddleware, authMiddleware, (req, res) => {
+  const { id } = req.params;
+  let user = users.find((user) => user.username === req.user);
+  const updatedTodos = user.todos.filter((todo) => todo.id !== id);
+  user.todos = updatedTodos;
+  return res.status(200).json({ message: "Todo deleted!" });
 });
 
 app.listen(3000, () => console.log("Server is running on Port 3000"));
