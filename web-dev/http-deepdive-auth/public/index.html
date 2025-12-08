@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo Application</title>
+    <style>
+      #sign-up {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+      }
+      #sign-in {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+      }
+      #info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 400px;
+        margin: 0 auto;
+        gap: 10px;
+      }
+      .textbox {
+        padding: 10px 5px;
+        border-radius: 5px;
+      }
+      #userInfo {
+        width: 400px;
+      }
+      #todos-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin: 10px auto;
+        gap: 10px;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+  </head>
+  <body>
+    <div style="display: flex; flex-direction: column">
+      <h1 style="text-align: center">Todo Application</h1>
+      <div
+        style="
+          display: flex;
+          justify-content: center;
+          gap: 50px;
+          margin: 20px auto;
+        "
+      >
+        <div>
+          <h2 style="text-align: center">Sign Up Here</h2>
+          <div id="sign-up">
+            <input class="textbox" type="text" placeholder="username" />
+            <input class="textbox" type="password" placeholder="password" />
+            <button onclick="signup()">Sign Up</button>
+          </div>
+          <h2 style="text-align: center">Sign In Here</h2>
+          <div id="sign-in">
+            <input class="textbox" type="text" placeholder="username" />
+            <input class="textbox" type="password" placeholder="password" />
+            <button onclick="signin()">Sign In</button>
+          </div>
+        </div>
+        <div id="info">
+          <h2 style="text-align: center">User Information Here</h2>
+          <textarea
+            name="userInfo"
+            id="userInfo"
+            rows="5"
+            placeholder="User Information Will appear here post signing in"
+          ></textarea>
+          <button
+            onclick="signout()"
+            style="width: 100px; margin: 0 auto; height: 30px"
+          >
+            Sign Out
+          </button>
+        </div>
+      </div>
+      <div id="todos-container">
+        <input
+          class="textbox"
+          id="todo-text"
+          type="text"
+          placeholder="Type your Todo"
+        />
+        <button onclick="addTodo()">Add</button>
+        <div id="todos"></div>
+      </div>
+    </div>
+    <script>
+      async function signup() {
+        const username = document.querySelectorAll("input")[0].value;
+        const password = document.querySelectorAll("input")[1].value;
+        try {
+          const response = await axios.post("http://127.0.0.1:3000/signup", {
+            username,
+            password,
+          });
+          alert(response.data.message);
+          document.querySelectorAll("input")[0].value = "";
+          document.querySelectorAll("input")[1].value = "";
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function signin() {
+        const username = document.querySelectorAll("input")[2].value;
+        const password = document.querySelectorAll("input")[3].value;
+        try {
+          const response = await axios.post("http://127.0.0.1:3000/signin", {
+            username,
+            password,
+          });
+          localStorage.setItem("token", response.data.token);
+          document.querySelectorAll("input")[2].value = "";
+          document.querySelectorAll("input")[3].value = "";
+          getUserInformation();
+          getTodos();
+        } catch (error) {
+          alert(error);
+        }
+      }
+      async function getUserInformation() {
+        try {
+          const response = await axios.get("http://127.0.0.1:3000/me", {
+            headers: {
+              authorization: localStorage.getItem("token"),
+            },
+          });
+          const userInfoTextArea = document.getElementById("userInfo");
+          userInfoTextArea.value = `${response.data.user.username} ${response.data.user.password}`;
+        } catch (error) {
+          alert(error);
+        }
+      }
+      function signout() {
+        localStorage.removeItem("token");
+        document.getElementById("userInfo").value = "";
+        document.getElementById("todos").innerHTML = "";
+        alert("Signed out successfully");
+      }
+      async function getTodos() {
+        try {
+          const response = await axios.get("http://127.0.0.1:3000/todos", {
+            headers: {
+              authorization: localStorage.getItem("token"),
+            },
+          });
+          response.data.todos.map((todo) => {
+            const div = document.createElement("div");
+            const p = document.createElement("p");
+            div.setAttribute("id", todo.id);
+            p.innerHTML = todo.title;
+            const deleteBtn = document.createElement("button");
+            deleteBtn.innerHTML = "Delete";
+            deleteBtn.setAttribute("onclick", `deleteTodo('${todo.id}')`);
+            const editBtn = document.createElement("button");
+            editBtn.innerHTML = "Edit";
+            editBtn.setAttribute("onclick", `editTodo('${todo.id}')`);
+            div.appendChild(p);
+            div.appendChild(editBtn);
+            div.appendChild(deleteBtn);
+            document.getElementById("todos").appendChild(div);
+          });
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function addTodo() {
+        const text = document.getElementById("todo-text").value;
+        try {
+          const response = await axios.post(
+            "http://127.0.0.1:3000/todos",
+            {
+              title: text,
+            },
+            {
+              headers: {
+                authorization: localStorage.getItem("token"),
+              },
+            }
+          );
+          alert(response.data.message);
+          document.getElementById("todos").innerHTML = "";
+          document.getElementById("todo-text").value = "";
+          getTodos();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function deleteTodo(id) {
+        try {
+          const response = await axios.delete(
+            "http://127.0.0.1:3000/todos/" + id,
+            {
+              headers: {
+                authorization: localStorage.getItem("token"),
+              },
+            }
+          );
+          alert(response.data.message);
+          document.getElementById("todos").innerHTML = "";
+          getTodos();
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+      async function editTodo(id) {
+        try {
+          const newTitle = prompt("Edit Your Todo");
+          if (newTitle) {
+            const response = await axios.patch(
+              "http://127.0.0.1:3000/todos/" + id,
+              {
+                title: newTitle,
+              },
+              {
+                headers: {
+                  authorization: localStorage.getItem("token"),
+                },
+              }
+            );
+            alert(response.data.message);
+            document.getElementById("todos").innerHTML = "";
+            getTodos();
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      }
+    </script>
+  </body>
+</html>
