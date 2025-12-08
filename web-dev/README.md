@@ -63,3 +63,9 @@ function map(arr, fn) {
 - We can use JWTs (JSON Web Tokens) in order to prevent this expensive operation. **JWTs are stateless, they contain all the info needed to authenticate a request, so the server doesn't need to store session data. All the data is stored in the token itself**.
 
 - _JWTs are a compact and self-contained way to represent information between two parties. They are commonly used for authentication and information exchange in web applications_. We can store JWTs in Cookies or Auth Headers(Authorization). **Cookies are only browser specific, mobile devices don't understand the cookies**
+
+- JWTs can be _decoded_ by anyone, but it can only be _verified_ by only the person who issued them (using the JWT Secret)
+
+  - res.header("jwt", token) -> sending the token in headers
+
+- "iat" field in jwt is **issued at** - "Unix Time stamp" at which the jwt is issued
