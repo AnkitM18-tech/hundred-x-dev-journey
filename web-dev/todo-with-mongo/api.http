@@ -1,0 +1,47 @@
+POST http://127.0.0.1:3000/signup
+Content-Type: application/json
+
+{
+    "name": "Harry",
+    "email": "harry@gmail.com",
+    "password": "harry123"
+}
+
+###
+
+POST http://127.0.0.1:3000/login
+Content-Type: application/json
+
+{
+    "email": "harry@gmail.com",
+    "password": "harry123"
+}
+
+###
+
+GET http://127.0.0.1:3000/todos
+Authorization: 
+
+###
+POST http://127.0.0.1:3000/todos
+Authorization: 
+Content-Type: application/json
+
+{
+    "title": "Go for Masters"
+}
+
+###
+PATCH http://127.0.0.1:3000/todos/69387622ce4708ec4fdef16a
+Authorization: 
+Content-Type: application/json
+
+{
+    "title": "Go for Masters abroad",
+    "done": true
+}
+
+###
+DELETE http://127.0.0.1:3000/todos/69387622ce4708ec4fdef16a
+Authorization: 
+Content-Type: application/json
