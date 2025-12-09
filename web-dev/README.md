@@ -69,3 +69,20 @@ function map(arr, fn) {
   - res.header("jwt", token) -> sending the token in headers
 
 - "iat" field in jwt is **issued at** - "Unix Time stamp" at which the jwt is issued
+
+### Databases
+
+- NoSQL databases are designed to handle a variety of data models and workloads that may not fit into the tabular schema of relational databases.
+
+  - Properties
+
+    - Schema Flexibility - allow for a _flexible schema_ , meaning you can store data in formats that don't require a fixed structure.
+    - Scalability - Many NoSQL DBs are designed to scale out **horizontally**, making it easier to distribute data across multiple servers and handle large volumes of traffic.
+
+- MongoDB is a NoSQL database that uses a document-oriented approach. Data is stored in flexible , JSON like documents, which can have nested structures and varied fields.
+- MongoDB is schemaless, we don't need to define a schema beforehand.
+- MongoDB have **Clusters** => inside Clusters we have multiple **Databases** => Inside Databases we have **Collections** => Inside Collections we have **Documents** => Inside Documents we have **Fields**
+
+- We should use **async-await** for DB calls, as there are chances the DB call would take some time and might fail in case it is down or unavailable, in that scenario we don't want to send our user a success message in case the DB call failed.
+
+- **Salting** in hashing ensures even though the passwords are same, they get hashed to different hashed passwords.This prevents attackers from using pre-computed tables(rainbow tables) to crack passwords. A salt is a random value added to the password before hashing.
