@@ -86,3 +86,5 @@ function map(arr, fn) {
 - We should use **async-await** for DB calls, as there are chances the DB call would take some time and might fail in case it is down or unavailable, in that scenario we don't want to send our user a success message in case the DB call failed.
 
 - **Salting** in hashing ensures even though the passwords are same, they get hashed to different hashed passwords.This prevents attackers from using pre-computed tables(rainbow tables) to crack passwords. A salt is a random value added to the password before hashing.
+
+- If the /admin and /user uses same JWT_SECRET and we are using different tables for admin and users, there might be chances that the "\_id" of some users and admin could be same (although less probability), so it is better to use different JWT_SECRETS for both if using different tables. This way we can prevent users to exploit the /admin functionalities. The middlewares will also get confused and let the request through if both of them are signed with same JWT_SECRET
