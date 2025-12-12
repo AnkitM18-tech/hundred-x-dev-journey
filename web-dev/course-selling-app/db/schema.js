@@ -77,7 +77,7 @@ const courseSchema = new Schema(
     adminId: {
       type: ObjectId,
       required: true,
-      ref: "Admins",
+      ref: "Admin",
     },
   },
   { timestamps: true }
@@ -88,12 +88,12 @@ const purchaseSchema = new Schema(
     courseId: {
       type: ObjectId,
       required: true,
-      ref: "Courses",
+      ref: "Course",
     },
     userId: {
       type: ObjectId,
       required: true,
-      ref: "Users",
+      ref: "User",
     },
   },
   { timestamps: true }
