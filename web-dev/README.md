@@ -141,3 +141,9 @@ function App() {
 
 const {bulbOn, setBulbOn} = useContext(BulbContext); -> to use the value inside the component we use useContext()
 ```
+
+- Custom hooks starts with "use" - useHookName() => another hook can be written inside a custom hook or a component. It doesn't make sense to write a hook inside a normal function like getValue() - invalid syntax
+
+- #### Why use custom hooks?
+  - Reusability - If you find yourself using the same logic in multiple components, a custom hook can help you avoid code duplication.
+  - Separation of Concerns - They allow you to separate business logic from UI logic, making your components more focused easier to understand.
