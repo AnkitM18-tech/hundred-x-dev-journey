@@ -88,3 +88,56 @@ function map(arr, fn) {
 - **Salting** in hashing ensures even though the passwords are same, they get hashed to different hashed passwords.This prevents attackers from using pre-computed tables(rainbow tables) to crack passwords. A salt is a random value added to the password before hashing.
 
 - If the /admin and /user uses same JWT_SECRET and we are using different tables for admin and users, there might be chances that the "\_id" of some users and admin could be same (although less probability), so it is better to use different JWT_SECRETS for both if using different tables. This way we can prevent users to exploit the /admin functionalities. The middlewares will also get confused and let the request through if both of them are signed with same JWT_SECRET
+
+```js
+function App() {
+  const [counter, setCounter] = useState(1);
+  let timer = 0; // every time the component re-renders due to state change, it is going to be overriden and reinitialized to 0. So it won't work as expected. So in order to preserve the value over re-renders we use useState or useRef.
+  const timer2 = useRef(null); // persist across re-renders but doesn't trigger re-render when its value changes, middle ground between raw variables and useState
+
+  function startClock() {
+    let value = setInterval(() => {
+      setCounter((c) => c + 1);
+    }, 1000);
+    timer2.current = value;
+  }
+
+  function stopClock() {
+    clearInterval(timer2.current);
+  }
+}
+```
+
+- useRef() => persistent across renders and no re-renders on change - provides a way to create a reference to a value or a DOM element that persists across renders but doesn't trigger re-render when the value changes.
+
+### Context API
+
+- Context - is created using **createContext()**. It serves as a container for the data you want to share
+- Provider - This component wraps part of your application and provides the context value to all its descendants. Any component that is a child of this Provider can access the context.
+- Consumer - This component subscribes to context changes. It allows you to access the context value using useContext hook.
+
+```js
+
+function BulbProvider({children}) {
+  const BulbContext = createContext();
+  const [bulbOn, setBulbOn] = useState(false);
+  return (
+    <div>
+    <BulbContext.Provider value={{ bulbOn: bulbOn, setBulbOn: setBulbOn }}>
+      {children} -> can access the context values provided by the Provider component
+    </BulbContext.Provider>
+      {other-children can reside here} -> can't access the context values as they are not wrapped by the Provider
+  </div>
+  )
+}
+
+function App() {
+  return (
+    <BulbProvider>
+      <Light />
+    </BulbProvider>
+  )
+}
+
+const {bulbOn, setBulbOn} = useContext(BulbContext); -> to use the value inside the component we use useContext()
+```
