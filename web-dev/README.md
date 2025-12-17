@@ -147,3 +147,12 @@ const {bulbOn, setBulbOn} = useContext(BulbContext); -> to use the value inside 
 - #### Why use custom hooks?
   - Reusability - If you find yourself using the same logic in multiple components, a custom hook can help you avoid code duplication.
   - Separation of Concerns - They allow you to separate business logic from UI logic, making your components more focused easier to understand.
+
+### Recoil
+
+- Atoms are units of state that can be read from and written to from any component. When an atom's state changes, all components that subscribed to that atom will re-render.
+
+- _When a component is re-rendered, all its children re-render as well._ So in order to prevent these children components from re-rendering without a change of props or state we can wrap them inside memo().
+- **memo lets you skip re-rendering a component when its props / state variable are unchanged.**
+
+- Selectors - represents a **piece of derived state**. You can think of derived state as the output of a _passing state to pure function that derives a new value from the said state_. Derived state is a powerful concept because it lets us build dynamic data that depends on other data.
