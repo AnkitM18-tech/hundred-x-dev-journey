@@ -71,6 +71,7 @@ const Sidebar = ({
                   className="size-6 md:size-8 cursor-pointer my-2"
                 />
               }
+              key={item}
               onClick={() => {}}
             />
           ))}
