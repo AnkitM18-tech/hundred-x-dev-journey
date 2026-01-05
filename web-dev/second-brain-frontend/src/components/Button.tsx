@@ -25,7 +25,7 @@ const sizeStyles: Record<Sizes, string> = {
 const Button = ({ variant, size, text, icon, onClick }: ButtonProps) => {
   return (
     <button
-      className={`${variantStyles[variant]} ${sizeStyles[size]} flex gap-2 items-center px-4 py-2 rounded-md cursor-pointer`}
+      className={`${variantStyles[variant]} ${sizeStyles[size]} flex gap-2 items-center px-2 py-1 md:px-4 md:py-2 rounded-md cursor-pointer`}
       onClick={onClick}
     >
       {icon} {text}
