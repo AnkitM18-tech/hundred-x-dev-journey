@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import cors from "cors";
 import express, {
   type NextFunction,
   type Request,
@@ -12,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(cors());
 
 import authRouter from "./routes/auth.routes.js";
 import contentRouter from "./routes/content.routes.js";
@@ -22,7 +24,7 @@ app.use("/api/v1/content", contentRouter);
 app.use("/api/v1/brain", shareRouter);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  return res.status(500).json({ message: err });
+  return res.status(500).json({ message: err.message });
 });
 
 connectToDB()
