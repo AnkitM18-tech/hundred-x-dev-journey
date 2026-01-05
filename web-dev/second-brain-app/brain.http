@@ -1,0 +1,69 @@
+### POST /signup
+
+POST http://127.0.0.1:3000/api/v1/auth/signup
+Content-Type: application/json
+
+{
+    "email": "",
+    "password": ""
+}
+
+### POST /signin
+
+POST http://127.0.0.1:3000/api/v1/auth/signin
+Content-Type: application/json
+
+{
+    "email": "",
+    "password": ""
+}
+
+### POST /content/
+
+POST http://127.0.0.1:3000/api/v1/content/
+Content-Type: application/json
+Authorization: 
+
+{
+    "link": "https://en.wikipedia.org/wiki/Mark_Zuckerberg",
+    "type": "article",
+    "title": "History of Mark Zuck"
+}
+
+### GET /content/
+
+GET http://127.0.0.1:3000/api/v1/content/
+Content-Type: application/json
+Authorization: 
+
+### DELETE /content/:id
+
+DELETE http://127.0.0.1:3000/api/v1/content/6956bdd245502329bf025025
+Authorization: 
+
+### PATCH /content/id
+
+PATCH http://127.0.0.1:3000/api/v1/content/6956be7cc18f7421da55f625
+Content-Type: application/json
+Authorization: 
+
+{
+    "link": "https://en.wikipedia.org/wiki/Mark_Zuckerberg_2",
+    "type": "video",
+    "title": ""
+}
+
+### GET /brain/:shareLink
+
+GET http://127.0.0.1:3000/api/v1/brain/ELKyZyAqOH
+
+
+### POST /brain/share
+
+POST http://127.0.0.1:3000/api/v1/brain/share
+Content-Type: application/json
+Authorization: 
+
+{
+    "share": true
+}
