@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-bg: #f8eafd;
+  --color-brand-text: #111827;
+
+  --color-tuna-50: #f6f7f9;
+  --color-tuna-100: #eceef2;
+  --color-tuna-200: #d4d8e3;
+  --color-tuna-300: #aeb7cb;
+  --color-tuna-400: #828fae;
+  --color-tuna-500: #637294;
+  --color-tuna-600: #4e5a7b;
+  --color-tuna-700: #404964;
+  --color-tuna-800: #383f54;
+  --color-tuna-900: #2f3444;
+  --color-tuna-950: #212430;
+}
+
+/* Update variables when .dark is present */
+.dark {
+  --color-brand-bg: #0f172a;
+  --color-brand-text: #f8fafc;
+}
