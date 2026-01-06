@@ -5,7 +5,7 @@ import Button from "./Button";
 import ContentCard from "./ContentCard";
 import CreateContentModal from "./CreateContentModal";
 import useContent from "../hooks/useContent";
-import { BACKEND_URL } from "../config";
+import { BACKEND_URL, FRONTEND_URL } from "../config";
 
 const Container = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +24,7 @@ const Container = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
 
       if (response.ok) {
         const data = await response.json();
-        const shareUrl = `${BACKEND_URL}/api/v1/brain/share/${data.data.hash}`;
+        const shareUrl = `${FRONTEND_URL}/brain/${data.data.hash}`;
         navigator.clipboard
           .writeText(shareUrl)
           .then(() => alert("Share link Copied to clipboard"))
