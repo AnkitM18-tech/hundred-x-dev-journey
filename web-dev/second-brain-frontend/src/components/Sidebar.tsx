@@ -5,7 +5,9 @@ import Video from "../assets/video.svg";
 import Audio from "../assets/audio.svg";
 import Image from "../assets/image.svg";
 import Article from "../assets/article.svg";
+import Logout from "../assets/logout.svg";
 import SidebarButton from "./SidebarButton";
+import { useNavigate } from "react-router";
 
 interface SideBarProps {
   theme: string | null;
@@ -39,6 +41,8 @@ const Sidebar = ({
   isSidebarOpen,
   toggleSidebar,
 }: SideBarProps) => {
+  const navigate = useNavigate();
+
   return (
     <aside
       className={`${
@@ -78,12 +82,25 @@ const Sidebar = ({
         </div>
       )}
 
-      <img
-        src={theme === "dark" ? Sun : Moon}
-        alt="theme-btn"
-        className="size-8 md:size-10 absolute bottom-4 left-4 cursor-pointer mb-4"
-        onClick={toggleTheme}
-      />
+      <div className="absolute w-11/12 bottom-4 left-4 mb-4 flex justify-between items-center">
+        <img
+          src={theme === "dark" ? Sun : Moon}
+          alt="theme-btn"
+          className="size-8 md:size-10 cursor-pointer"
+          onClick={toggleTheme}
+        />
+        {isSidebarOpen && (
+          <img
+            src={Logout}
+            alt="logout"
+            className="size-8 md:size-10 cursor-pointer"
+            onClick={() => {
+              localStorage.setItem("token", "");
+              navigate("/login");
+            }}
+          />
+        )}
+      </div>
     </aside>
   );
 };
