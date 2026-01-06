@@ -15,8 +15,11 @@ const CreateContentModal = ({
   const addContent = async () => {
     const data = {
       title: title.current?.value,
-      link: link.current?.value,
       type: type.current?.value,
+      link:
+        type.current?.value === "image"
+          ? link.current?.value + "?width=320"
+          : link.current?.value,
     };
 
     try {
