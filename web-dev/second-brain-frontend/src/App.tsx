@@ -4,6 +4,7 @@ import Signup from "./components/Signup";
 import Signin from "./components/Signin";
 import Dashboard from "./components/Dashboard";
 import Error from "./components/Error";
+import ShareBoard from "./components/ShareBoard";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard />,
     errorElement: <Error />,
+  },
+  {
+    path: "/brain/:shareLink",
+    element: <ShareBoard />,
   },
 ]);
 
