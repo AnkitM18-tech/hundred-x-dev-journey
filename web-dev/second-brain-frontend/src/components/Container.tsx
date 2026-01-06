@@ -5,10 +5,35 @@ import Button from "./Button";
 import ContentCard from "./ContentCard";
 import CreateContentModal from "./CreateContentModal";
 import useContent from "../hooks/useContent";
+import { BACKEND_URL } from "../config";
 
 const Container = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { contents, refresh } = useContent();
+
+  const shareBrain = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/v1/brain/share`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token") as string,
+        },
+        body: JSON.stringify({ share: true }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const shareUrl = `${BACKEND_URL}/api/v1/brain/share/${data.data.hash}`;
+        navigator.clipboard
+          .writeText(shareUrl)
+          .then(() => alert("Share link Copied to clipboard"))
+          .catch((err) => alert(`Error sharing brain: ${err}`));
+      }
+    } catch (error) {
+      alert(`Error sharing brain: ${error}`);
+    }
+  };
 
   useEffect(() => {
     refresh();
@@ -30,7 +55,7 @@ const Container = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
             size="md"
             text={"Share Brain"}
             icon={<img src={Share} className="size-4" />}
-            onClick={() => {}}
+            onClick={shareBrain}
           />
           <Button
             variant="primary"
