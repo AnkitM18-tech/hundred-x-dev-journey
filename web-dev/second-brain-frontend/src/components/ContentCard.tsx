@@ -36,8 +36,8 @@ const linkTypes: Record<string, (link: string) => ReactElement> = {
     </blockquote>
   ),
   image: (link) => (
-    <iframe src={link} className="w-full h-80 object-cover">
-      <img src={link} alt="article" />
+    <iframe src={link} className="w-full h-80 object-contain">
+      <img src={link + "?width=320"} alt="article" />
     </iframe>
   ),
   audio: (link) => (
