@@ -5,8 +5,10 @@ import Image from "../assets/image.svg";
 import Share from "../assets/share.svg";
 import Delete from "../assets/delete.svg";
 import type { ReactElement } from "react";
+import { BACKEND_URL } from "../config";
 
 interface CardProps {
+  id: string;
   title: string;
   link: string;
   type: "article" | "video" | "audio" | "image";
@@ -48,7 +50,27 @@ const linkTypes: Record<string, (link: string) => ReactElement> = {
   ),
 };
 
-const ContentCard = ({ title, link, type }: CardProps) => {
+const ContentCard = ({ id, title, link, type }: CardProps) => {
+  const deleteContent = async () => {
+    const result = confirm("Are you sure you want to delete this content?");
+    if (!result) return;
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/v1/content/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("token") as string,
+        },
+      });
+
+      if (response.ok) {
+        alert("Content deleted successfully");
+        window.location.reload();
+      }
+    } catch (error) {
+      alert(`Error deleting content: ${error}`);
+    }
+  };
+
   return (
     <div className="flex flex-col bg-tuna-300 border border-tuna-50 text-tuna-900 dark:bg-tuna-100 dark:text-tuna-900 max-w-96 rounded-md px-4 py-2">
       <div className="flex justify-between">
@@ -72,6 +94,7 @@ const ContentCard = ({ title, link, type }: CardProps) => {
             src={Delete}
             alt="article"
             className="size-4 md:size-6 cursor-pointer"
+            onClick={deleteContent}
           />
         </div>
       </div>

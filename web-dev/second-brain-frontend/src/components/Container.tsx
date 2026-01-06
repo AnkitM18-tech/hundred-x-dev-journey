@@ -69,6 +69,7 @@ const Container = ({ isSidebarOpen }: { isSidebarOpen: boolean }) => {
       <div className="flex flex-wrap m-10 gap-4 max-h-96">
         {contents.map((content) => (
           <ContentCard
+            id={content._id}
             key={content._id}
             title={content.title}
             link={content.link}
