@@ -421,24 +421,77 @@ pub fn notify_t_bound_fault<T: Summary+Fault>(u: &T) {
 // use std::thread;
 // use std::time::Duration;
 
-#[derive(Debug)] // Debug is a custom derived procedural macro
-struct User {
-    name: String,
-    age: u32
-}
+// Declarative Macro
+// macro_rules! eval {
+//     ($expr: expr) => {
+//         $expr
+//     };
+// }
+
+// #[derive(Debug)] // Debug is a custom derived procedural macro
+// struct User {
+//     name: String,
+//     age: u32
+// }
 
 // #[post("/user/")] // attribute like macro
-fn create_user() {
+// fn create_user() {
     // sqlx::query("INSERT INTO users (name, age) VALUES ($1, $2)") // function like procedural macro
         // .bind("John")
         // .bind(32)
         // .execute()
         // .unwrap();
+// }
+
+use std::fmt::Error;
+
+trait Serialize {
+    fn serialize(&self) ->Vec<u8>;
+}
+
+trait Deserialize: Sized {
+    fn deserialize(base: &[u8]) -> Result<Self, Error>;
+}
+
+#[derive(Debug)]
+struct Swap {
+    qty_1: u32,
+    qty_2: u32
+}
+
+impl Serialize for Swap {
+    fn serialize(&self) ->Vec<u8> {
+        let mut v = vec![];
+        v.extend_from_slice(&self.qty_1.to_be_bytes());
+        v.extend_from_slice(&self.qty_2.to_be_bytes());
+        return v;
+    }
+}
+
+impl Deserialize for Swap {
+    fn deserialize(base: &[u8]) -> Result<Self, Error> {
+        if base.len() < 8 {
+            return Err(Error);
+        }
+        let qty_1 = u32::from_be_bytes(base[0..4].try_into().unwrap());
+        let qty_2 = u32::from_be_bytes(base[4..8].try_into().unwrap());
+        Ok(Swap { qty_1, qty_2 })
+    }
 }
 
 fn main() {
-
-    println!("Hello from the other side!"); // declarative macro
+    
+    let s = Swap {
+        qty_1: 10,
+        qty_2: 20
+    };
+    let v = s.serialize();
+    println!("{:?}", v);
+    let s2 = Swap::deserialize(&v).unwrap();
+    println!("{:?}", s2);
+    // let ans = eval!(2 + 3 * 5);
+    // println!("Answer: {}", ans);
+    // println!("Hello from the other side!"); // declarative macro
 
     // let (tx, rx) = mpsc::channel();
     // for i in 0..10 {
