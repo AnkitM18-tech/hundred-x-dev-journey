@@ -480,6 +480,7 @@ impl Deserialize for Swap {
 }
 
 fn main() {
+
     
     let s = Swap {
         qty_1: 10,
