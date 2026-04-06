@@ -1,8 +1,20 @@
 import express from "express";
+import { prisma } from "@repo/db";
 
 const app = express();
 
-app.post("/website", (req, res) => {});
+app.use(express.json());
+
+app.post("/website", async (req, res) => {
+  const website = await prisma.website.create({
+    data: {
+      url: req.body.url,
+      time_added: new Date(),
+    },
+  });
+
+  return res.status(201).json({ id: website.id });
+});
 
 app.get("/status/:websiteId", (req, res) => {});
 
